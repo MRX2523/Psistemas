@@ -122,7 +122,6 @@
             <label for="fecha-nacimiento">Fecha de Nacimiento:</label>
             <input type="date" id="fecha-nacimiento">
             <button onclick="calcularEdad()">Calcular Edad</button>
-            <p id="resultado-edad"></p>
             <div class="results">
                 <h3>Resultados Guardados:</h3>
                 <div id="resultados-edad"></div>
@@ -134,15 +133,11 @@
             <h2>Calculadora de Salario Neto</h2>
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre">
-
             <label for="horas-trabajadas">Horas Trabajadas:</label>
             <input type="number" id="horas-trabajadas">
-
             <label for="pago-por-hora">Pago por Hora:</label>
             <input type="number" id="pago-por-hora">
-
             <button onclick="calcularSalarioNeto()">Calcular Salario Neto</button>
-            <p id="resultado-salario"></p>
             <div class="results">
                 <h3>Resultados Guardados:</h3>
                 <div id="resultados-salario"></div>
@@ -166,26 +161,53 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        async function cargarResultados() {
+            const edadContainer = document.getElementById("resultados-edad");
+            const salarioContainer = document.getElementById("resultados-salario");
+            edadContainer.innerHTML = "";
+            salarioContainer.innerHTML = "";
+
+            const edades = await getDocs(collection(db, "calculadora_edad"));
+            edades.forEach(doc => {
+                const data = doc.data();
+                edadContainer.innerHTML += `<div class="result-item">Fecha: ${data.fechaNacimiento}, Edad: ${data.edad} años</div>`;
+            });
+
+            const salarios = await getDocs(collection(db, "calculadora_salario"));
+            salarios.forEach(doc => {
+                const data = doc.data();
+                salarioContainer.innerHTML += `<div class="result-item">Nombre: ${data.nombre}, Salario Neto: $${data.salarioNeto.toFixed(2)}</div>`;
+            });
+        }
+
         window.calcularEdad = async function () {
             const fechaNacimiento = document.getElementById("fecha-nacimiento").value;
             if (fechaNacimiento) {
                 const fechaNac = new Date(fechaNacimiento);
                 const hoy = new Date();
                 let edad = hoy.getFullYear() - fechaNac.getFullYear();
-                if (hoy.getMonth() - fechaNac.getMonth() < 0) edad--;
-                document.getElementById("resultado-edad").textContent = `Su edad es: ${edad} años`;
+                if (hoy.getMonth() - fechaNac.getMonth() < 0 || 
+                   (hoy.getMonth() - fechaNac.getMonth() === 0 && hoy.getDate() < fechaNac.getDate())) {
+                    edad--;
+                }
                 await addDoc(collection(db, "calculadora_edad"), { fechaNacimiento, edad });
+                cargarResultados();
             }
         };
 
         window.calcularSalarioNeto = async function () {
             const nombre = document.getElementById("nombre").value;
-            const horasTrabajadas = document.getElementById("horas-trabajadas").value;
-            const pagoPorHora = document.getElementById("pago-por-hora").value;
-            const salarioNeto = horasTrabajadas * pagoPorHora * 0.8;
-            document.getElementById("resultado-salario").textContent = `Salario Neto: $${salarioNeto}`;
-            await addDoc(collection(db, "calculadora_salario"), { nombre, salarioNeto });
+            const horasTrabajadas = parseFloat(document.getElementById("horas-trabajadas").value);
+            const pagoPorHora = parseFloat(document.getElementById("pago-por-hora").value);
+
+            if (nombre && horasTrabajadas && pagoPorHora) {
+                const salarioNeto = horasTrabajadas * pagoPorHora * 0.8;
+                await addDoc(collection(db, "calculadora_salario"), { nombre, salarioNeto });
+                cargarResultados();
+            }
         };
+
+        cargarResultados();
     </script>
 </body>
 </html>
