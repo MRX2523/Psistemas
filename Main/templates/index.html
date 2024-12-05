@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Edad y Salario</title>
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Edad y Salario</h1>
+
+        <!-- Sección de cálculo de edad -->
+        <div class="card" id="edad-calculator">
+            <h2>Calculadora de Edad</h2>
+            <label for="fecha-nacimiento">Fecha de Nacimiento:</label>
+            <input type="date" id="fecha-nacimiento">
+            <button onclick="calcularEdad()">Calcular Edad</button>
+            <p id="resultado-edad"></p>
+        </div>
+
+        <!-- Sección de cálculo de salario neto -->
+        <div class="card" id="salario-calculator">
+            <h2>Calculadora de Salario Neto</h2>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre">
+
+            <label for="horas-trabajadas">Horas Trabajadas:</label>
+            <input type="number" id="horas-trabajadas">
+
+            <label for="pago-por-hora">Pago por Hora:</label>
+            <input type="number" id="pago-por-hora">
+
+            <button onclick="calcularSalarioNeto()">Calcular Salario Neto</button>
+            <p id="resultado-salario"></p>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>

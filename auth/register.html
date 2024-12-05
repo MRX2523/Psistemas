@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <style>
+    :root {
+      --background-dark: #121212;
+      --background-light: #ffffff;
+      --text-dark: #ffffff;
+      --text-light: #000000;
+      --input-background-dark: #1e1e1e;
+      --input-background-light: #f2f2f2;
+      --button-background: #1a73e8;
+      --button-text: #ffffff;
+      --label-color-dark: #bbb;
+      --label-color-light: #333;
+      --toggle-dark: rgba(255, 255, 255, 0.2);
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: var(--background-dark);
+      color: var(--text-dark);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .container {
+      width: 400px;
+      padding: 20px;
+      background-color: var(--input-background-dark);
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      transition: background-color 0.3s;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    .input-container {
+      position: relative;
+      margin: 10px 0;
+    }
+
+    .input-container input {
+      width: 100%;
+      padding: 10px;
+      padding-top: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: var(--input-background-dark);
+      color: var(--text-dark);
+      transition: background-color 0.3s, color 0.3s;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .input-container label {
+      position: absolute;
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%);
+      color: var(--label-color-dark);
+      font-size: 16px;
+      transition: all 0.3s, color 0.3s;
+      pointer-events: none;
+    }
+
+    .input-container input:focus + label,
+    .input-container input:not(:placeholder-shown) + label {
+      top: 5px;
+      font-size: 12px;
+      color: var(--button-background);
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      background-color: var(--button-background);
+      color: var(--button-text);
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #145bb5;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: 10px;
+    }
+
+    .checkbox label {
+      margin-left: 5px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 60px;
+      height: 30px;
+      background-color: var(--input-background-dark);
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      margin: 10px auto;
+      box-shadow: 0 0 10px var(--toggle-dark);
+    }
+
+    .toggle-switch::before {
+      content: "";
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      background-color: var(--button-background);
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
+      box-shadow: 0 0 5px var(--button-background);
+    }
+
+    .toggle-switch.active {
+      background-color: #1a73e8;
+    }
+
+    .toggle-switch.active::before {
+      transform: translateX(30px);
+      background-color: #ffffff;
+    }
+
+    a {
+      color: #1a73e8;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Regístrate</h1>
+    <form id="register-form">
+      <div class="input-container">
+        <input type="email" id="register-email" placeholder=" " required />
+        <label for="register-email">Correo Electrónico</label>
+      </div>
+      <div class="input-container">
+        <input type="password" id="register-password" placeholder=" " required />
+        <label for="register-password">Contraseña</label>
+      </div>
+      <div class="input-container">
+        <input type="password" id="confirm-password" placeholder=" " required />
+        <label for="confirm-password">Confirmar Contraseña</label>
+      </div>
+      <div class="checkbox">
+        <input type="checkbox" id="show-password">
+        <label for="show-password">Mostrar contraseñas</label>
+      </div>
+      <button type="submit">Crear cuenta</button>
+    </form>
+    <p>¿Ya tienes una cuenta? <a href="login.html">Inicia sesión</a></p>
+    <div id="theme-switch" class="toggle-switch"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyARiFPQMwX2IU74eXUWViz-GSCsxlIA6TM",
+      authDomain: "sistemassd-app.firebaseapp.com",
+      projectId: "sistemassd-app",
+      storageBucket: "sistemassd-app.firebasestorage.app",
+      messagingSenderId: "529491657971",
+      appId: "1:529491657971:web:e0779f53976d038f12e386"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    document.getElementById("register-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("register-email").value;
+      const password = document.getElementById("register-password").value;
+      const confirmPassword = document.getElementById("confirm-password").value;
+
+      if (password !== confirmPassword) {
+        alert("Las contraseñas no coinciden. Por favor, inténtalo de nuevo.");
+        return;
+      }
+
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        alert("Cuenta creada con éxito. Ahora puedes iniciar sesión.");
+        window.location.href = "login.html";
+      } catch (error) {
+        alert(error.message);
+      }
+    });
+
+    // Password visibility toggle
+    document.getElementById("show-password").addEventListener("change", (e) => {
+      const passwordInput = document.getElementById("register-password");
+      const confirmPasswordInput = document.getElementById("confirm-password");
+      const inputType = e.target.checked ? "text" : "password";
+      passwordInput.type = inputType;
+      confirmPasswordInput.type = inputType;
+    });
+
+    // Toggle theme switch
+    const themeSwitch = document.getElementById("theme-switch");
+    themeSwitch.addEventListener("click", () => {
+      themeSwitch.classList.toggle("active");
+      const isLightMode = themeSwitch.classList.contains("active");
+
+      // Toggle background and text colors
+      document.body.style.backgroundColor = isLightMode ? "var(--background-light)" : "var(--background-dark)";
+      document.body.style.color = isLightMode ? "var(--text-light)" : "var(--text-dark)";
+      document.querySelector(".container").style.backgroundColor = isLightMode
+        ? "var(--input-background-light)"
+        : "var(--input-background-dark)";
+
+      // Ensure input background changes dynamically
+      document.querySelectorAll(".input-container input").forEach((input) => {
+        input.style.backgroundColor = isLightMode ? "var(--input-background-light)" : "var(--input-background-dark)";
+        input.style.color = isLightMode ? "var(--text-light)" : "var(--text-dark)";
+      });
+    });
+  </script>
+</body>
+</html>
