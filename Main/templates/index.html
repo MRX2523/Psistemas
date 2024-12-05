@@ -4,7 +4,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Edad y Salario</title>
-    <link rel="stylesheet" href="/styles/style.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            width: 90%;
+            max-width: 1000px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #0066cc;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            padding: 25px;
+            flex: 1 1 45%;
+            border-radius: 10px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            min-width: 300px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            color: #555;
+            margin: 12px 0 6px;
+        }
+
+        input[type="date"],
+        input[type="text"],
+        input[type="number"],
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        input[type="date"],
+        input[type="text"],
+        input[type="number"] {
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        button {
+            background-color: #0066cc;
+            color: #ffffff;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #004c99;
+            transform: scale(1.02);
+        }
+
+        .results {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 15px;
+        }
+
+        .result-item {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -17,6 +123,10 @@
             <input type="date" id="fecha-nacimiento">
             <button onclick="calcularEdad()">Calcular Edad</button>
             <p id="resultado-edad"></p>
+            <div class="results">
+                <h3>Resultados Guardados:</h3>
+                <div id="resultados-edad"></div>
+            </div>
         </div>
 
         <!-- Sección de cálculo de salario neto -->
@@ -33,9 +143,49 @@
 
             <button onclick="calcularSalarioNeto()">Calcular Salario Neto</button>
             <p id="resultado-salario"></p>
+            <div class="results">
+                <h3>Resultados Guardados:</h3>
+                <div id="resultados-salario"></div>
+            </div>
         </div>
     </div>
-    
-    <script src="app.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-app.js";
+        import { getFirestore, addDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.17.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyARiFPQMwX2IU74eXUWViz-GSCsxlIA6TM",
+            authDomain: "sistemassd-app.firebaseapp.com",
+            projectId: "sistemassd-app",
+            storageBucket: "sistemassd-app.firebasestorage.app",
+            messagingSenderId: "529491657971",
+            appId: "1:529491657971:web:e0779f53976d038f12e386",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.calcularEdad = async function () {
+            const fechaNacimiento = document.getElementById("fecha-nacimiento").value;
+            if (fechaNacimiento) {
+                const fechaNac = new Date(fechaNacimiento);
+                const hoy = new Date();
+                let edad = hoy.getFullYear() - fechaNac.getFullYear();
+                if (hoy.getMonth() - fechaNac.getMonth() < 0) edad--;
+                document.getElementById("resultado-edad").textContent = `Su edad es: ${edad} años`;
+                await addDoc(collection(db, "calculadora_edad"), { fechaNacimiento, edad });
+            }
+        };
+
+        window.calcularSalarioNeto = async function () {
+            const nombre = document.getElementById("nombre").value;
+            const horasTrabajadas = document.getElementById("horas-trabajadas").value;
+            const pagoPorHora = document.getElementById("pago-por-hora").value;
+            const salarioNeto = horasTrabajadas * pagoPorHora * 0.8;
+            document.getElementById("resultado-salario").textContent = `Salario Neto: $${salarioNeto}`;
+            await addDoc(collection(db, "calculadora_salario"), { nombre, salarioNeto });
+        };
+    </script>
 </body>
 </html>

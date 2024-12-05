@@ -34,11 +34,11 @@ h1 {
 .card {
     background-color: #ffffff;
     padding: 25px;
-    flex: 1 1 45%; /* Ocupa aproximadamente el 45% del ancho del contenedor */
+    flex: 1 1 45%;
     border-radius: 10px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    min-width: 300px; /* Asegura que cada tarjeta tenga un ancho mínimo */
+    min-width: 300px;
 }
 
 .card:hover {
