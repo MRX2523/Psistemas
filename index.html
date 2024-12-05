@@ -177,12 +177,12 @@
 
         <!-- Sección de cálculo de salario neto -->
         <div class="card" id="salario-calculator">
-            <h2>Calculadora de Salario Neto</h2>
+            <h2>Calculadora de Salario Neto (Colones)</h2>
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre">
             <label for="horas-trabajadas">Horas Trabajadas:</label>
             <input type="number" id="horas-trabajadas">
-            <label for="pago-por-hora">Pago por Hora:</label>
+            <label for="pago-por-hora">Pago por Hora (Colones):</label>
             <input type="number" id="pago-por-hora">
             <button onclick="calcularSalarioNeto()">Calcular Salario Neto</button>
             <div class="results">
@@ -242,7 +242,7 @@
             const salarios = await getDocs(collection(db, "calculadora_salario"));
             salarios.forEach(doc => {
                 const data = doc.data();
-                salarioContainer.innerHTML += `<div class="result-item">Nombre: ${data.nombre}, Salario Neto: $${data.salarioNeto.toFixed(2)}</div>`;
+                salarioContainer.innerHTML += `<div class="result-item">Nombre: ${data.nombre}, Salario Neto: ₡${data.salarioNeto.toFixed(2)}</div>`;
             });
         }
 
@@ -267,7 +267,7 @@
             const pagoPorHora = parseFloat(document.getElementById("pago-por-hora").value);
 
             if (nombre && horasTrabajadas && pagoPorHora) {
-                const salarioNeto = horasTrabajadas * pagoPorHora * 0.8;
+                const salarioNeto = horasTrabajadas * pagoPorHora * 0.8; // 20% de deducciones
                 await addDoc(collection(db, "calculadora_salario"), { nombre, salarioNeto });
                 cargarResultados();
             }
