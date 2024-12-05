@@ -32,7 +32,8 @@
     }
 
     .container {
-      width: 400px;
+      width: 90%;
+      max-width: 400px;
       padding: 20px;
       background-color: var(--input-background-dark);
       border-radius: 10px;
@@ -43,7 +44,7 @@
 
     h1 {
       margin-bottom: 20px;
-      font-size: 24px;
+      font-size: 1.8rem;
     }
 
     .input-container {
@@ -60,7 +61,7 @@
       background-color: var(--input-background-dark);
       color: var(--text-dark);
       transition: background-color 0.3s, color 0.3s;
-      font-size: 16px;
+      font-size: 1rem;
       box-sizing: border-box;
     }
 
@@ -70,7 +71,7 @@
       left: 10px;
       transform: translateY(-50%);
       color: var(--label-color-dark);
-      font-size: 16px;
+      font-size: 1rem;
       transition: all 0.3s, color 0.3s;
       pointer-events: none;
     }
@@ -78,7 +79,7 @@
     .input-container input:focus + label,
     .input-container input:not(:placeholder-shown) + label {
       top: 5px;
-      font-size: 12px;
+      font-size: 0.85rem;
       color: var(--button-background);
     }
 
@@ -90,7 +91,7 @@
       border-radius: 5px;
       background-color: var(--button-background);
       color: var(--button-text);
-      font-size: 16px;
+      font-size: 1rem;
       cursor: pointer;
       transition: background-color 0.3s;
     }
@@ -108,6 +109,7 @@
 
     .checkbox label {
       margin-left: 5px;
+      font-size: 0.85rem;
     }
 
     .toggle-switch {
@@ -147,10 +149,35 @@
     a {
       color: #1a73e8;
       text-decoration: none;
+      font-size: 0.9rem;
     }
 
     a:hover {
       text-decoration: underline;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .container {
+        padding: 15px;
+      }
+
+      button {
+        font-size: 0.9rem;
+        padding: 8px;
+      }
+
+      .input-container input {
+        font-size: 0.9rem;
+      }
+
+      .input-container label {
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
@@ -216,7 +243,6 @@
       }
     });
 
-    // Password visibility toggle
     document.getElementById("show-password").addEventListener("change", (e) => {
       const passwordInput = document.getElementById("register-password");
       const confirmPasswordInput = document.getElementById("confirm-password");
@@ -225,20 +251,16 @@
       confirmPasswordInput.type = inputType;
     });
 
-    // Toggle theme switch
     const themeSwitch = document.getElementById("theme-switch");
     themeSwitch.addEventListener("click", () => {
       themeSwitch.classList.toggle("active");
       const isLightMode = themeSwitch.classList.contains("active");
-
-      // Toggle background and text colors
       document.body.style.backgroundColor = isLightMode ? "var(--background-light)" : "var(--background-dark)";
       document.body.style.color = isLightMode ? "var(--text-light)" : "var(--text-dark)";
       document.querySelector(".container").style.backgroundColor = isLightMode
         ? "var(--input-background-light)"
         : "var(--input-background-dark)";
 
-      // Ensure input background changes dynamically
       document.querySelectorAll(".input-container input").forEach((input) => {
         input.style.backgroundColor = isLightMode ? "var(--input-background-light)" : "var(--input-background-dark)";
         input.style.color = isLightMode ? "var(--text-light)" : "var(--text-dark)";

@@ -32,7 +32,8 @@
     }
 
     .container {
-      width: 400px;
+      width: 90%;
+      max-width: 400px;
       padding: 20px;
       background-color: var(--input-background-dark);
       border-radius: 10px;
@@ -43,7 +44,7 @@
 
     h1 {
       margin-bottom: 20px;
-      font-size: 24px;
+      font-size: 1.8rem;
     }
 
     .input-container {
@@ -116,20 +117,20 @@
 
     .toggle-switch {
       position: relative;
-      width: 60px; /* Increased width */
-      height: 30px; /* Increased height */
+      width: 60px; 
+      height: 30px; 
       background-color: var(--input-background-dark);
       border-radius: 30px;
       cursor: pointer;
       transition: background-color 0.3s, box-shadow 0.3s;
-      box-shadow: 0 0 10px var(--toggle-dark); /* Slight shadow in dark mode */
+      box-shadow: 0 0 10px var(--toggle-dark); 
     }
 
     .toggle-switch::before {
       content: "";
       position: absolute;
-      width: 26px; /* Increased size */
-      height: 26px; /* Increased size */
+      width: 26px; 
+      height: 26px; 
       background-color: var(--button-background);
       border-radius: 50%;
       top: 2px;
@@ -143,7 +144,7 @@
     }
 
     .toggle-switch.active::before {
-      transform: translateX(30px); /* Adjusted for larger switch */
+      transform: translateX(30px); 
       background-color: #ffffff;
     }
 
@@ -159,6 +160,22 @@
     .footer {
       margin-top: 10px;
       font-size: 14px;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .container {
+        padding: 15px;
+      }
+
+      button {
+        font-size: 14px;
+        padding: 8px;
+      }
     }
   </style>
 </head>
